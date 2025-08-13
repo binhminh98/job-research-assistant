@@ -1,0 +1,60 @@
+services:
+  # MinIO and Postgres)
+  # postgres:
+  #   image: postgres:latest
+  #   container_name: ml_flow_postgres
+  #   restart: always
+  #   ports:
+  #     - "25432:5432"
+  #   environment:
+  #     POSTGRES_USER: ${POSTGRES_USER}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  #     POSTGRES_DB: ${POSTGRES_DB}
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #     - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  minio:
+    image: quay.io/minio/minio:latest
+    container_name: minio_mlflow
+    restart: always
+    ports:
+      - "29010:9000"
+      - "29011:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+      MINIO_STORAGE_USE_HTTPS: false
+    command: server /data --console-address ":9001"
+    volumes:
+      - /home/mlai18/minio/data:/data
+
+  # FastAPI backend
+  # fastapi_backend:
+  #   build: ../src/fastapi_app
+  #   image: fastapi:latest
+  #   container_name: fastapi_backend
+  #   ports:
+  #     - "20080:80"
+  #   environment:
+  #     MLFLOW_URI: ${MLFLOW_URI}
+  #     MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+  #     MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+  #     MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+  #   command: >
+  #     uvicorn app:app --host 0.0.0.0 --port 80
+
+  # # Plotly Dash UI
+  # plotly_dash_ui:
+  #   build: ../src/plotly_dash_app
+  #   image: plotly_dash_app
+  #   container_name: plotly_dash_ui
+  #   ports:
+  #     - "28050:8050"
+  #   environment:
+  #     FASTAPI_URI: ${FASTAPI_URI}
+  #   command: >
+  #     python app.py
+
+volumes:
+  postgres_data:
