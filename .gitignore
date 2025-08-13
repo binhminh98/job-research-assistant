@@ -1,0 +1,17 @@
+# Secrets and env
+*.secrets
+*.env
+*_venv
+
+# Cache
+__pycache__/
+*cache
+*_test
+
+# Notebook artifacts
+*.ipynb_checkpoints
+*.ipynb
+
+# Logs
+logs/*
+*.log
