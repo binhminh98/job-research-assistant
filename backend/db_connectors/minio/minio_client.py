@@ -7,11 +7,10 @@ from io import BytesIO
 from pathlib import Path
 
 import pandas as pd
-from dotenv import load_dotenv
+from config import MINIO_ACCESS_KEY, MINIO_ENDPOINT, MINIO_SECRET_KEY
 from general_utils.logging import get_logger
+from langchain_community.document_loaders.s3_file import S3FileLoader
 from minio import Minio
-
-load_dotenv(override=True)
 
 file_logger = get_logger(
     "file_" + __name__,
@@ -36,9 +35,9 @@ class MinioClient:
         Initialize the MinIO client with the necessary configuration.
         """
         return Minio(
-            endpoint=os.getenv("MINIO_ENDPOINT"),
-            access_key=os.getenv("MINIO_ACCESS_KEY"),
-            secret_key=os.getenv("MINIO_SECRET_KEY"),
+            endpoint=MINIO_ENDPOINT,
+            access_key=MINIO_ACCESS_KEY,
+            secret_key=MINIO_SECRET_KEY,
             secure=False,  # Set to True if using HTTPS
         )
 
@@ -173,6 +172,21 @@ class MinioClient:
             stream_logger.error(f"Failed to get file buffer: {e}")
 
             return None
+
+    def get_object_using_langchain_s3_loader(self, bucket_name, object_key):
+        """
+        Get an object from the specified MinIO bucket using the Langchain S3 loader.
+        """
+        file_loader = S3FileLoader(
+            bucket=bucket_name,
+            key=object_key,
+            endpoint_url=f"http://{MINIO_ENDPOINT}",
+            aws_access_key_id=MINIO_ACCESS_KEY,
+            aws_secret_access_key=MINIO_SECRET_KEY,
+            use_ssl=False,
+        )
+
+        return file_loader.load()
 
 
 if __name__ == "__main__":

@@ -3,18 +3,15 @@ Main app backend module for FastAPI app.
 """
 
 import uvicorn
-
-# from endpoints.analyze_endpoints import router as analyze_router
-# from endpoints.progress_endpoints import router as progress_router
-# from endpoints.questions_endpoints import router as questions_router
+from endpoints.analyze_endpoints import router as analyze_router
+from endpoints.interview_prep_endpoints import router as interview_prep_router
 from endpoints.upload_endpoints import router as upload_router
 from fastapi import FastAPI
 
 app = FastAPI()
 app.include_router(upload_router)
-# app.include_router(analyze_router)
-# app.include_router(questions_router)
-# app.include_router(progress_router)
+app.include_router(analyze_router)
+app.include_router(interview_prep_router)
 
 
 @app.get("/")
