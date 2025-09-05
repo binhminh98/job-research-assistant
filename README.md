@@ -39,8 +39,7 @@ The Job Research Assistant is an AI-powered application that helps job seekers a
 
 ## Project Structure
 
-```markdown:/home/mlai18/ml_playground/job-research-assistant/README.md
-<code_block_to_apply_changes_from>
+```
 job-research-assistant/
 ├── backend/                          # FastAPI backend application
 │   ├── api_utils/                   # API utility functions
