@@ -14,14 +14,16 @@ router = APIRouter(
 
 
 @router.post("/")
-async def upload_file(file: UploadFile = File(...)) -> JSONResponse:
+async def upload_file(
+    username: str, file: UploadFile = File(...)
+) -> JSONResponse:
     try:
         # Validate file extension
         FileUploadResponse(filename=str(file.filename))
 
         file_content = await file.read()
 
-        response = UploadServices.upload_file_to_minio(file, file_content)
+        response = UploadServices.upload_file(file, file_content, username)
 
         if response:
             return JSONResponse(

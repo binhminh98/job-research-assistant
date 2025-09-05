@@ -8,5 +8,5 @@ from api_utils.upload_api_utils import UploadApiUtils
 class UploadServices:
 
     @staticmethod
-    def upload_file_to_minio(file, file_content):
-        return UploadApiUtils.upload_file_to_minio(file, file_content)
+    def upload_file(file, file_content, username):
+        return UploadApiUtils.upload_file(file, file_content, username)
