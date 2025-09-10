@@ -1,30 +1,49 @@
 services:
   # FastAPI backend
-  # fastapi_backend:
-  #   build: ../src/fastapi_app
-  #   image: fastapi:latest
-  #   container_name: fastapi_backend
-  #   ports:
-  #     - "20080:80"
-  #   environment:
-  #     MLFLOW_URI: ${MLFLOW_URI}
-  #     MINIO_ENDPOINT: ${MINIO_ENDPOINT}
-  #     MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
-  #     MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
-  #   command: >
-  #     uvicorn app:app --host 0.0.0.0 --port 80
+  fastapi_backend:
+    build: ../backend
+    image: job_research_assistant_fastapi_backend:latest
+    container_name: job_research_assistant_fastapi_backend
+    ports:
+      - "18050:80"
+    environment:
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_HOST: ${POSTGRES_HOST}
+    networks:
+      - app-network
+    command: >
+      uvicorn app:app --host 0.0.0.0 --port 80
 
-  # # Plotly Dash UI
-  # plotly_dash_ui:
-  #   build: ../src/plotly_dash_app
-  #   image: plotly_dash_app
-  #   container_name: plotly_dash_ui
-  #   ports:
-  #     - "28050:8050"
-  #   environment:
-  #     FASTAPI_URI: ${FASTAPI_URI}
-  #   command: >
-  #     python app.py
+  # Plotly Dash UI
+  plotly_dash_ui:
+    build: ../frontend
+    image: job_research_assistant_plotly_dash_app:latest
+    container_name: job_research_assistant_plotly_dash_ui
+    ports:
+      - "38050:8050"
+    environment:
+      BACKEND_URL: ${BACKEND_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      ALGORITHM: ${ALGORITHM}
+      EXPIRATION_MINUTES: ${EXPIRATION_MINUTES}
+    networks:
+      - app-network
+    depends_on:
+      - fastapi_backend
+    command: >
+      gunicorn --bind 0.0.0.0:8050 --workers 4 app:server
 
 volumes:
   postgres_data:
+
+networks:
+  app-network:
+    driver: bridge
+    name: job_research_assistant_network
