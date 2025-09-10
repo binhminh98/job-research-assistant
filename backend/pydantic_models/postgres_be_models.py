@@ -46,6 +46,7 @@ class CVData(Base):
     languages = Column(String)
     education = Column(JSONB)
     experience = Column(JSONB)
+    projects = Column(JSONB)
     inserted_at = Column(DateTime, nullable=False, server_default=func.now())
     inserted_by = Column(
         String, nullable=False, server_default=func.session_user()

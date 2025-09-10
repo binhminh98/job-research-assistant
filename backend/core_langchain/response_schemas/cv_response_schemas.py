@@ -21,7 +21,7 @@ class CVResponseSchema(BaseModel):
     experience: Optional[str] = Field(
         description="Work experience including job title, company, dates, and responsibilities"
     )
-    project: Optional[str] = Field(
+    projects: Optional[str] = Field(
         description="Projects the candidate has worked on, including the name of the project, the role, and the responsibilities"
     )
     education: Optional[str] = Field(
