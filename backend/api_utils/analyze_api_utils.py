@@ -34,15 +34,39 @@ def filter_accessible_urls(urls):
     return accessible_urls, non_accessible_urls
 
 
-def get_existing_urls():
+def get_existing_urls_data(urls: list | set | tuple | str):
     query = """
-        SELECT DISTINCT jsonb_array_elements_text(lpe.cmetadata->'urls') as url
-        FROM langchain_pg_embedding lpe
+        SELECT
+            DISTINCT jsonb_array_elements_text(lpe.cmetadata->'urls') AS url,
+            lpe.cmetadata->>'company_name' AS company_name,
+            lpe.cmetadata->>'job_title' AS job_title
+        FROM
+            langchain_pg_embedding lpe,
+            jsonb_array_elements_text(lpe.cmetadata->'urls') AS url
+        WHERE
+            url IN :urls
     """
-    result = POSTGRES_CLIENT.query_db(query)
-    existing_urls = {row[0] for row in result.fetchall()} if result else set()
+    if isinstance(urls, str):
+        urls = tuple([urls])
+    elif (
+        isinstance(urls, list)
+        or isinstance(urls, set)
+        or isinstance(urls, tuple)
+    ):
+        urls = tuple(urls)
 
-    return existing_urls
+    result = POSTGRES_CLIENT.query_db(query, {"urls": urls})
+
+    existing_urls_data = (
+        {
+            row[0]: {"company_name": row[1], "job_title": row[2]}
+            for row in result.fetchall()
+        }
+        if result
+        else {}
+    )
+
+    return existing_urls_data
 
 
 def split_text_into_chunks(text):
@@ -90,11 +114,11 @@ class AnalyzeApiUtils:
     def extract_urls(jd_urls, url_type):
         unique_urls = set(jd_urls)
 
-        # Existing URLs
-        existing_urls = get_existing_urls()
+        # Existing URLs data
+        existing_urls_data = get_existing_urls_data(unique_urls)
 
         # New URLs
-        new_urls = unique_urls - existing_urls
+        new_urls = unique_urls - existing_urls_data.keys()
 
         if new_urls:
             accessible_urls, non_accessible_urls = filter_accessible_urls(
@@ -163,10 +187,13 @@ class AnalyzeApiUtils:
             }
 
         else:
-            return {"message": "No new URLs to extract!"}
+            return {
+                "message": "No new URLs to extract!",
+                "existing_urls_data": existing_urls_data,
+            }
 
     @staticmethod
-    def analyze(cv_object_key, company_name, job_title):
+    def analyze(username, cv_object_key, company_name, job_title):
         cv_file_hash = cv_object_key.split("/")[0]
 
         chains_factory = ChainsFactory(
@@ -188,9 +215,25 @@ class AnalyzeApiUtils:
                 complete_cv_recommendations_chain.invoke(input_data)
             )
         except Exception as e:
-            return {"message": "Error generating CV recommendations!"}
+            return None
+
+        job_id = POSTGRES_CLIENT.create_cv_analysis_job(
+            complete_cv_recommendations_result,
+            username,
+            cv_file_hash,
+            company_name,
+            job_title,
+        ).get("job_id", None)
 
         return {
             "message": "CV recommendations generated successfully!",
-            "result": complete_cv_recommendations_result,
+            "job_id": job_id,
         }
+
+    @staticmethod
+    def get_cv_analysis_jobs(username):
+        return POSTGRES_CLIENT.get_cv_analysis_jobs(username)
+
+    @staticmethod
+    def get_cv_analysis_job_by_id(job_id):
+        return POSTGRES_CLIENT.get_cv_analysis_job_by_id(job_id)

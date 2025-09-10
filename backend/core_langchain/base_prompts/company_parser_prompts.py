@@ -22,7 +22,10 @@ class CompanyInfoParserPrompt(BasePrompt):
                 Then summarize the following company values and culture text concisely in 30-35 bullet points:\n\n
                 {raw_company_website_text}
 
-                Then please put all the summarized bullet points into the summarized_company_values field.\n\n
+                Then please put all the summarized bullet points into the summarized_company_values field as a single string with bullet points like:
+                - First value
+                - Second value
+                - Third value\n\n
                 Please use this format: \n\n{format_instructions}\n\n
             """,
             input_variables=["raw_company_website_text"],

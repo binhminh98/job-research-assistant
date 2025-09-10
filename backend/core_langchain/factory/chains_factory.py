@@ -23,13 +23,13 @@ from db_connectors.postgres.postgres_client import (
     PostgresClient,
 )
 from general_utils.logging import get_logger
+from general_utils.utils import get_matching_strings
 from langchain.schema.runnable import (
     RunnableLambda,
     RunnablePassthrough,
     RunnableSerializable,
 )
 from langchain_openai import OpenAIEmbeddings
-from rapidfuzz import process
 
 file_logger = get_logger(
     "file_" + __name__,
@@ -46,24 +46,6 @@ POSTGRES_CLIENT = PostgresClient()
 EMBEDDING_FUNCTION = OpenAIEmbeddings()
 PGVECTOR_JD = PGVectorClient(EMBEDDING_FUNCTION, "job_descriptions")
 PGVECTOR_COMPANY_INFO = PGVectorClient(EMBEDDING_FUNCTION, "company_info")
-
-
-def get_matching_strings(
-    input_name: str, known_names: list[str], threshold: int = 85
-):
-    """
-    Function to find the best matched strings (e.g some_company_name -> company_name).
-
-    Args:
-        input_name: str
-        known_names: list[str]
-        threshold: int
-
-    Returns:
-        list[str]
-    """
-    matches = process.extract(input_name, known_names, limit=None)
-    return [match for match, score, _ in matches if score >= threshold]
 
 
 class ChainsFactory:
