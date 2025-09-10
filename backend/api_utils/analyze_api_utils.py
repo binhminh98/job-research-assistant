@@ -210,12 +210,12 @@ class AnalyzeApiUtils:
             "job_title": job_title,
         }
 
-        try:
-            complete_cv_recommendations_result = (
-                complete_cv_recommendations_chain.invoke(input_data)
-            )
-        except Exception as e:
-            return None
+        # try:
+        complete_cv_recommendations_result = (
+            complete_cv_recommendations_chain.invoke(input_data)
+        )
+        # except Exception as e:
+        #     return None
 
         job_id = POSTGRES_CLIENT.create_cv_analysis_job(
             complete_cv_recommendations_result,

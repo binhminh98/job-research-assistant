@@ -112,6 +112,7 @@ class UploadApiUtils:
                 languages=cv_parser_result["languages"],
                 education=cv_parser_result["education"],
                 experience=cv_parser_result["experience"],
+                projects=cv_parser_result["projects"],
             )
 
             # Add the new CV to the session
