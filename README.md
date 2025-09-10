@@ -29,6 +29,7 @@ The Job Research Assistant is an AI-powered application that helps job seekers a
 - **Plotly Dash** - Interactive web applications and dashboards
 - **Workflow** - Login/Sign up -> Upload your CV -> AI-Powered CV Analysis -> Interview preparation
 
+https://github.com/user-attachments/assets/37e70bfa-5eec-47b4-bedc-6044fc965e6a
 
 ### Infrastructure
 - **Docker & Docker Compose** - Containerization and orchestration
