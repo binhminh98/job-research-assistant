@@ -41,7 +41,75 @@ class InterviewScreen(BaseComponent):
                         # Left side of the screen
                         dbc.Col(
                             children=[
-                                html.Div(id="interview-left-side-content"),
+                                dbc.Row(
+                                    [
+                                        # Company dropdown
+                                        html.H6(
+                                            "Company",
+                                            style={
+                                                "fontSize": "1.2rem",
+                                                "marginTop": "10px",
+                                            },
+                                        ),
+                                        dcc.Dropdown(
+                                            id="interview-company-dropdown",
+                                            options=[],
+                                            value=None,
+                                            placeholder="Select a Company",
+                                            style={
+                                                "border": "none",
+                                                "borderRadius": "8px",
+                                                "color": "black",
+                                                "padding": "2%",
+                                            },
+                                        ),
+                                        html.Div(
+                                            id="interview-upload-status-1",
+                                            className="mb-3",
+                                        ),
+                                        html.Hr(),
+                                        # Job title dropdown
+                                        html.H6(
+                                            "Job Title",
+                                            style={
+                                                "fontSize": "1.2rem",
+                                                "marginTop": "10px",
+                                            },
+                                        ),
+                                        dcc.Dropdown(
+                                            id="interview-job-title-dropdown",
+                                            options=[],
+                                            value=None,
+                                            placeholder="Select a Job Title",
+                                            style={
+                                                "border": "none",
+                                                "borderRadius": "8px",
+                                                "color": "black",
+                                                "padding": "2%",
+                                            },
+                                        ),
+                                        html.Div(
+                                            id="interview-upload-status-2",
+                                            className="mb-3",
+                                        ),
+                                        html.Div(
+                                            dbc.Button(
+                                                "Generate",
+                                                id="interview-btn",
+                                                color="primary",
+                                                className="me-2",
+                                                style={
+                                                    "background": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                                                    "border": "none",
+                                                    "borderRadius": "8px",
+                                                },
+                                            ),
+                                            style={
+                                                "textAlign": "center",
+                                            },
+                                        ),
+                                    ],
+                                )
                             ],
                             width=2,
                         ),
@@ -298,125 +366,6 @@ class InterviewScreen(BaseComponent):
         """Register callbacks for the interview screen component."""
 
         @app.callback(
-            Output("interview-left-side-content", "children"),
-            [Input("url", "pathname")],
-            [State("session-store", "data")],
-            prevent_initial_call=False,
-        )
-        def update_interview_left_side_content(pathname, session_store):
-            # Company dropdown
-            company_names_response = BACKEND_API_CLIENT.get_company_names(
-                session_store["username"]
-            )
-
-            company_names = (
-                company_names_response.get("data", {})
-                if company_names_response
-                and company_names_response.get("success")
-                else {}
-            ).get("company_names", [])
-
-            company_names_dropdown_options = [
-                {
-                    "label": company_name,
-                    "value": company_name,
-                }
-                for company_name in company_names
-            ]
-
-            # Job title dropdown
-            job_titles_response = BACKEND_API_CLIENT.get_job_titles(
-                session_store["username"]
-            )
-
-            job_titles = (
-                job_titles_response.get("data", {})
-                if job_titles_response and job_titles_response.get("success")
-                else {}
-            ).get("job_titles", [])
-
-            job_titles_dropdown_options = [
-                {
-                    "label": job_title,
-                    "value": job_title,
-                }
-                for job_title in job_titles
-            ]
-
-            return (
-                dbc.Row(
-                    [
-                        # Company dropdown
-                        html.H6(
-                            "Company",
-                            style={
-                                "fontSize": "1.2rem",
-                                "marginTop": "10px",
-                            },
-                        ),
-                        dcc.Dropdown(
-                            id="interview-company-dropdown",
-                            options=company_names_dropdown_options,
-                            value=0,
-                            placeholder="Select a Company",
-                            style={
-                                "border": "none",
-                                "borderRadius": "8px",
-                                "color": "black",
-                                "padding": "2%",
-                            },
-                        ),
-                        html.Div(
-                            id="interview-upload-status-1",
-                            className="mb-3",
-                        ),
-                        html.Hr(),
-                        # Job title dropdown
-                        html.H6(
-                            "Job Title",
-                            style={
-                                "fontSize": "1.2rem",
-                                "marginTop": "10px",
-                            },
-                        ),
-                        dcc.Dropdown(
-                            id="interview-job-title-dropdown",
-                            options=job_titles_dropdown_options,
-                            value=0,
-                            placeholder="Select a Job Title",
-                            style={
-                                "border": "none",
-                                "borderRadius": "8px",
-                                "color": "black",
-                                "padding": "2%",
-                            },
-                        ),
-                        html.Div(
-                            id="interview-upload-status-2",
-                            className="mb-3",
-                        ),
-                        html.Div(
-                            dbc.Button(
-                                "Generate",
-                                id="interview-btn",
-                                color="primary",
-                                className="me-2",
-                                style={
-                                    "background": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                                    "border": "none",
-                                    "borderRadius": "8px",
-                                },
-                            ),
-                            style={
-                                "textAlign": "center",
-                            },
-                        ),
-                    ],
-                ),
-                None,
-            )
-
-        @app.callback(
             Output("interview-upload-status-1", "children"),
             [Input("interview-company-dropdown", "value")],
             prevent_initial_call=False,
@@ -459,8 +408,12 @@ class InterviewScreen(BaseComponent):
 
         @app.callback(
             [
-                Output("interview-card-table-1", "children"),
-                Output("interview-card-table-2", "children"),
+                Output(
+                    "interview-card-table-1", "children", allow_duplicate=True
+                ),
+                Output(
+                    "interview-card-table-2", "children", allow_duplicate=True
+                ),
                 Output("global-alert-tab", "children", allow_duplicate=True),
                 Output("global-alert-tab", "is_open", allow_duplicate=True),
                 Output("global-alert-tab", "color", allow_duplicate=True),
@@ -516,3 +469,57 @@ class InterviewScreen(BaseComponent):
                     True,
                     "danger",
                 )
+
+        @app.callback(
+            Output("interview-company-dropdown", "options"),
+            Output("interview-job-title-dropdown", "options"),
+            [
+                Input("url", "pathname"),
+            ],
+            State("session-store", "data"),
+            prevent_initial_call=True,
+        )
+        def populate_dropdown_options(pathname, session_store):
+            if pathname != "/interview" or not session_store:
+                return [], []
+
+            # Company dropdown
+            company_names_response = BACKEND_API_CLIENT.get_company_names(
+                session_store["username"]
+            )
+
+            company_names = (
+                company_names_response.get("data", {})
+                if company_names_response
+                and company_names_response.get("success")
+                else {}
+            ).get("company_names", [])
+
+            company_names_dropdown_options = [
+                {
+                    "label": company_name,
+                    "value": company_name,
+                }
+                for company_name in company_names
+            ]
+
+            # Job title dropdown
+            job_titles_response = BACKEND_API_CLIENT.get_job_titles(
+                session_store["username"]
+            )
+
+            job_titles = (
+                job_titles_response.get("data", {})
+                if job_titles_response and job_titles_response.get("success")
+                else {}
+            ).get("job_titles", [])
+
+            job_titles_dropdown_options = [
+                {
+                    "label": job_title,
+                    "value": job_title,
+                }
+                for job_title in job_titles
+            ]
+
+            return company_names_dropdown_options, job_titles_dropdown_options

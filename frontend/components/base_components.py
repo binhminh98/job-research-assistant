@@ -29,7 +29,7 @@ class PageTitle(BaseComponent):
     """
 
     @staticmethod
-    def render(title: str, tagline: str):
+    def render(title: str):
         """
         Render the Job Research Assistant title for any page.
         """
@@ -38,8 +38,6 @@ class PageTitle(BaseComponent):
                 html.Span(
                     [
                         title,
-                        " - ",
-                        html.I(tagline),
                     ]
                 ),
             ],
@@ -64,6 +62,6 @@ class PageTitle(BaseComponent):
             """Update page title based on current page/tab"""
 
             title = "🤖 AI-Powered CV Tailoring"
-            tagline = "Land more interviews with a CV that fits"
+            # tagline = "Land more interviews with a CV that fits"
 
-            return PageTitle.render(title, tagline)
+            return PageTitle.render(title)
