@@ -329,25 +329,6 @@ def handle_logout(n_clicks):
     return dash.no_update, dash.no_update
 
 
-# Main tabs update callbacks
-@app.callback(
-    Output("main-tabs", "active_tab"),
-    [Input("url", "pathname")],
-    prevent_initial_call=True,
-)
-def update_main_tabs(pathname):
-    return pathname.split("/")[-1]
-
-
-@app.callback(
-    Output("url", "pathname", allow_duplicate=True),
-    [Input("main-tabs", "active_tab")],
-    prevent_initial_call=True,
-)
-def update_url(active_tab):
-    return "/" + active_tab
-
-
 # Register callbacks for the screens
 PAGE_TITLE.register_callbacks(app)
 LOG_IN_SCREEN.register_callbacks(app)
@@ -361,4 +342,4 @@ INTERVIEW_SCREEN.register_callbacks(app)
 server = app.server
 
 if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0", port=8050)
+    app.run(debug=True, host="0.0.0.0", port=8050)
