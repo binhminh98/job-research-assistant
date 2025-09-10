@@ -60,17 +60,17 @@ class AnalyzeScreen(BaseComponent):
                                                 "background": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                                             },
                                         ),
-                                        # dbc.Tab(
-                                        #     label="Use Existing Knowledge Base",
-                                        #     tab_id="tab-2",
-                                        #     active_label_style={
-                                        #         "color": "white",
-                                        #         "background": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-                                        #     },
-                                        # ),
+                                        dbc.Tab(
+                                            label="Use Existing Knowledge Base",
+                                            tab_id="tab-2",
+                                            active_label_style={
+                                                "color": "white",
+                                                "background": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                                            },
+                                        ),
                                     ],
                                     id="analyze-tabs",
-                                    active_tab="tab-1",
+                                    active_tab="tab-3",
                                     style={
                                         "border": "1px solid rgba(255,255,255,0.2)",
                                         "borderRadius": "15px",
@@ -352,163 +352,163 @@ class AnalyzeScreen(BaseComponent):
                     None,
                 )
 
-            # elif active_tab == "tab-2":
-            #     # CV dropdown
-            #     cv_response = BACKEND_API_CLIENT.get_cv_data_by_username(
-            #         session_store["username"]
-            #     )
+            elif active_tab == "tab-2":
+                # CV dropdown
+                cv_response = BACKEND_API_CLIENT.get_cv_data_by_username(
+                    session_store["username"]
+                )
 
-            #     cv_data = (
-            #         cv_response.get("data", {})
-            #         if cv_response and cv_response.get("success")
-            #         else {}
-            #     )
+                cv_data = (
+                    cv_response.get("data", {})
+                    if cv_response and cv_response.get("success")
+                    else {}
+                )
 
-            #     cv_dropdown_options = [
-            #         {
-            #             "label": cv.get("file_name", "N/A"),
-            #             "value": cv.get("file_hash", "N/A"),
-            #         }
-            #         for cv in cv_data
-            #     ]
+                cv_dropdown_options = [
+                    {
+                        "label": cv.get("file_name", "N/A"),
+                        "value": cv.get("file_hash", "N/A"),
+                    }
+                    for cv in cv_data
+                ]
 
-            #     # Company dropdown
-            #     company_names_response = BACKEND_API_CLIENT.get_company_names(
-            #         session_store["username"]
-            #     )
+                # Company dropdown
+                company_names_response = BACKEND_API_CLIENT.get_company_names(
+                    session_store["username"]
+                )
 
-            #     company_names = (
-            #         company_names_response.get("data", {})
-            #         if company_names_response
-            #         and company_names_response.get("success")
-            #         else {}
-            #     ).get("company_names", [])
+                company_names = (
+                    company_names_response.get("data", {})
+                    if company_names_response
+                    and company_names_response.get("success")
+                    else {}
+                ).get("company_names", [])
 
-            #     company_names_dropdown_options = [
-            #         {
-            #             "label": company_name,
-            #             "value": company_name,
-            #         }
-            #         for company_name in company_names
-            #     ]
+                company_names_dropdown_options = [
+                    {
+                        "label": company_name,
+                        "value": company_name,
+                    }
+                    for company_name in company_names
+                ]
 
-            #     # Job title dropdown
-            #     job_titles_response = BACKEND_API_CLIENT.get_job_titles(
-            #         session_store["username"]
-            #     )
+                # Job title dropdown
+                job_titles_response = BACKEND_API_CLIENT.get_job_titles(
+                    session_store["username"]
+                )
 
-            #     job_titles = (
-            #         job_titles_response.get("data", {})
-            #         if job_titles_response
-            #         and job_titles_response.get("success")
-            #         else {}
-            #     ).get("job_titles", [])
+                job_titles = (
+                    job_titles_response.get("data", {})
+                    if job_titles_response
+                    and job_titles_response.get("success")
+                    else {}
+                ).get("job_titles", [])
 
-            #     job_titles_dropdown_options = [
-            #         {
-            #             "label": job_title,
-            #             "value": job_title,
-            #         }
-            #         for job_title in job_titles
-            #     ]
+                job_titles_dropdown_options = [
+                    {
+                        "label": job_title,
+                        "value": job_title,
+                    }
+                    for job_title in job_titles
+                ]
 
-            #     return (
-            #         dbc.Row(
-            #             [
-            #                 # CV dropdown
-            #                 html.H6(
-            #                     "CV",
-            #                     style={
-            #                         "fontSize": "1.2rem",
-            #                         "marginTop": "10px",
-            #                     },
-            #                 ),
-            #                 dcc.Dropdown(
-            #                     id="analyze-cv-dropdown-2",
-            #                     options=cv_dropdown_options,
-            #                     value=0,
-            #                     placeholder="Select a CV",
-            #                     style={
-            #                         "border": "none",
-            #                         "borderRadius": "8px",
-            #                         "color": "black",
-            #                         "padding": "2%",
-            #                     },
-            #                 ),
-            #                 html.Div(
-            #                     id="upload-tab-2-status-1",
-            #                     className="mb-3",
-            #                 ),
-            #                 html.Hr(),
-            #                 # Company dropdown
-            #                 html.H6(
-            #                     "Company",
-            #                     style={
-            #                         "fontSize": "1.2rem",
-            #                         "marginTop": "10px",
-            #                     },
-            #                 ),
-            #                 dcc.Dropdown(
-            #                     id="analyze-company-dropdown",
-            #                     options=company_names_dropdown_options,
-            #                     value=0,
-            #                     placeholder="Select a Company",
-            #                     style={
-            #                         "border": "none",
-            #                         "borderRadius": "8px",
-            #                         "color": "black",
-            #                         "padding": "2%",
-            #                     },
-            #                 ),
-            #                 html.Div(
-            #                     id="upload-tab-2-status-2",
-            #                     className="mb-3",
-            #                 ),
-            #                 html.Hr(),
-            #                 # Job title dropdown
-            #                 html.H6(
-            #                     "Job Title",
-            #                     style={
-            #                         "fontSize": "1.2rem",
-            #                         "marginTop": "10px",
-            #                     },
-            #                 ),
-            #                 dcc.Dropdown(
-            #                     id="analyze-job-title-dropdown",
-            #                     options=job_titles_dropdown_options,
-            #                     value=0,
-            #                     placeholder="Select a Job Title",
-            #                     style={
-            #                         "border": "none",
-            #                         "borderRadius": "8px",
-            #                         "color": "black",
-            #                         "padding": "2%",
-            #                     },
-            #                 ),
-            #                 html.Div(
-            #                     id="upload-tab-2-status-3",
-            #                     className="mb-3",
-            #                 ),
-            #                 html.Div(
-            #                     dbc.Button(
-            #                         "Analyze",
-            #                         id="analyze-btn-2",
-            #                         color="primary",
-            #                         className="me-2",
-            #                         style={
-            #                             "background": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-            #                             "border": "none",
-            #                             "borderRadius": "8px",
-            #                         },
-            #                     ),
-            #                     style={
-            #                         "textAlign": "center",
-            #                     },
-            #                 ),
-            #             ],
-            #         ),
-            #         None,
-            #     )
+                return (
+                    dbc.Row(
+                        [
+                            # CV dropdown
+                            html.H6(
+                                "CV",
+                                style={
+                                    "fontSize": "1.2rem",
+                                    "marginTop": "10px",
+                                },
+                            ),
+                            dcc.Dropdown(
+                                id="analyze-cv-dropdown-2",
+                                options=cv_dropdown_options,
+                                value=0,
+                                placeholder="Select a CV",
+                                style={
+                                    "border": "none",
+                                    "borderRadius": "8px",
+                                    "color": "black",
+                                    "padding": "2%",
+                                },
+                            ),
+                            html.Div(
+                                id="upload-tab-2-status-1",
+                                className="mb-3",
+                            ),
+                            html.Hr(),
+                            # Company dropdown
+                            html.H6(
+                                "Company",
+                                style={
+                                    "fontSize": "1.2rem",
+                                    "marginTop": "10px",
+                                },
+                            ),
+                            dcc.Dropdown(
+                                id="analyze-company-dropdown",
+                                options=company_names_dropdown_options,
+                                value=0,
+                                placeholder="Select a Company",
+                                style={
+                                    "border": "none",
+                                    "borderRadius": "8px",
+                                    "color": "black",
+                                    "padding": "2%",
+                                },
+                            ),
+                            html.Div(
+                                id="upload-tab-2-status-2",
+                                className="mb-3",
+                            ),
+                            html.Hr(),
+                            # Job title dropdown
+                            html.H6(
+                                "Job Title",
+                                style={
+                                    "fontSize": "1.2rem",
+                                    "marginTop": "10px",
+                                },
+                            ),
+                            dcc.Dropdown(
+                                id="analyze-job-title-dropdown",
+                                options=job_titles_dropdown_options,
+                                value=0,
+                                placeholder="Select a Job Title",
+                                style={
+                                    "border": "none",
+                                    "borderRadius": "8px",
+                                    "color": "black",
+                                    "padding": "2%",
+                                },
+                            ),
+                            html.Div(
+                                id="upload-tab-2-status-3",
+                                className="mb-3",
+                            ),
+                            html.Div(
+                                dbc.Button(
+                                    "Analyze",
+                                    id="analyze-btn-2",
+                                    color="primary",
+                                    className="me-2",
+                                    style={
+                                        "background": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                                        "border": "none",
+                                        "borderRadius": "8px",
+                                    },
+                                ),
+                                style={
+                                    "textAlign": "center",
+                                },
+                            ),
+                        ],
+                    ),
+                    None,
+                )
 
             elif active_tab == "tab-3":
 
@@ -709,74 +709,74 @@ class AnalyzeScreen(BaseComponent):
             else:
                 return [dash.no_update] * 6
 
-        # @app.callback(
-        #     Output("upload-tab-2-status-1", "children"),
-        #     [Input("analyze-cv-dropdown-2", "value")],
-        #     [State("analyze-cv-dropdown-2", "options")],
-        #     prevent_initial_call=False,
-        # )
-        # def update_tab_2_status_1(file_hash, options):
-        #     if file_hash:
-        #         file_name = [
-        #             option["label"]
-        #             for option in options
-        #             if option["value"] == file_hash
-        #         ][0]
+        @app.callback(
+            Output("upload-tab-2-status-1", "children"),
+            [Input("analyze-cv-dropdown-2", "value")],
+            [State("analyze-cv-dropdown-2", "options")],
+            prevent_initial_call=False,
+        )
+        def update_tab_2_status_1(file_hash, options):
+            if file_hash:
+                file_name = [
+                    option["label"]
+                    for option in options
+                    if option["value"] == file_hash
+                ][0]
 
-        #         status_alert = dbc.Alert(
-        #             [
-        #                 f"File {file_name} loaded successfully!",
-        #             ],
-        #             color="success",
-        #             className="mb-3",
-        #         )
+                status_alert = dbc.Alert(
+                    [
+                        f"File {file_name} loaded successfully!",
+                    ],
+                    color="success",
+                    className="mb-3",
+                )
 
-        #         return status_alert
+                return status_alert
 
-        #     else:
-        #         return dash.no_update
+            else:
+                return dash.no_update
 
-        # @app.callback(
-        #     Output("upload-tab-2-status-2", "children"),
-        #     [Input("analyze-company-dropdown", "value")],
-        #     prevent_initial_call=False,
-        # )
-        # def update_tab_2_status_2(company_name):
-        #     if company_name:
+        @app.callback(
+            Output("upload-tab-2-status-2", "children"),
+            [Input("analyze-company-dropdown", "value")],
+            prevent_initial_call=False,
+        )
+        def update_tab_2_status_2(company_name):
+            if company_name:
 
-        #         status_alert = dbc.Alert(
-        #             [
-        #                 f"Company info for {company_name} loaded successfully!",
-        #             ],
-        #             color="success",
-        #             className="mb-3",
-        #         )
+                status_alert = dbc.Alert(
+                    [
+                        f"Company info for {company_name} loaded successfully!",
+                    ],
+                    color="success",
+                    className="mb-3",
+                )
 
-        #         return status_alert
+                return status_alert
 
-        #     else:
-        #         return dash.no_update
+            else:
+                return dash.no_update
 
-        # @app.callback(
-        #     Output("upload-tab-2-status-3", "children"),
-        #     [Input("analyze-job-title-dropdown", "value")],
-        #     prevent_initial_call=False,
-        # )
-        # def update_tab_2_status_3(job_title):
-        #     if job_title:
+        @app.callback(
+            Output("upload-tab-2-status-3", "children"),
+            [Input("analyze-job-title-dropdown", "value")],
+            prevent_initial_call=False,
+        )
+        def update_tab_2_status_3(job_title):
+            if job_title:
 
-        #         status_alert = dbc.Alert(
-        #             [
-        #                 f"Job info for {job_title} loaded successfully!",
-        #             ],
-        #             color="success",
-        #             className="mb-3",
-        #         )
+                status_alert = dbc.Alert(
+                    [
+                        f"Job info for {job_title} loaded successfully!",
+                    ],
+                    color="success",
+                    className="mb-3",
+                )
 
-        #         return status_alert
+                return status_alert
 
-        #     else:
-        #         return dash.no_update
+            else:
+                return dash.no_update
 
         @app.callback(
             Output("upload-tab-3-status-1", "children"),
@@ -1174,3 +1174,14 @@ class AnalyzeScreen(BaseComponent):
                     True,
                     "danger",
                 )
+
+        @app.callback(
+            Output("analyze-tabs", "active_tab"),
+            [Input("url", "pathname")],
+            prevent_initial_call=False,
+        )
+        def update_analyze_tabs(pathname):
+            if pathname == "/analyze":
+                return "tab-3"
+            else:
+                return dash.no_update
