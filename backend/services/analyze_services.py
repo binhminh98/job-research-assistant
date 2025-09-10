@@ -16,5 +16,15 @@ class AnalyzeServices:
         return AnalyzeApiUtils.extract_urls(company_urls, url_type)
 
     @staticmethod
-    def analyze(cv_object_key, company_name, job_title):
-        return AnalyzeApiUtils.analyze(cv_object_key, company_name, job_title)
+    def analyze(username, cv_object_key, company_name, job_title):
+        return AnalyzeApiUtils.analyze(
+            username, cv_object_key, company_name, job_title
+        )
+
+    @staticmethod
+    def get_cv_analysis_jobs(username):
+        return AnalyzeApiUtils.get_cv_analysis_jobs(username)
+
+    @staticmethod
+    def get_cv_analysis_job_by_id(job_id):
+        return AnalyzeApiUtils.get_cv_analysis_job_by_id(job_id)

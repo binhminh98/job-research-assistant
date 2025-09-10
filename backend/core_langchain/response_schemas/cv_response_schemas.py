@@ -9,20 +9,22 @@ from pydantic import BaseModel, Field
 
 class CVResponseSchema(BaseModel):
     name: str = Field(description="Full name of the candidate")
-    contact: str = Field(description="Email and phone number if available")
-    summary: str = Field(
+    contact: Optional[str] = Field(
+        description="Email and phone number if available"
+    )
+    summary: Optional[str] = Field(
         description="Summary of the candidate's career and skills"
     )
-    skills: str = Field(
+    skills: Optional[str] = Field(
         description="List of key skills, both technical and soft skills"
     )
-    experience: str = Field(
+    experience: Optional[str] = Field(
         description="Work experience including job title, company, dates, and responsibilities"
     )
-    project: str = Field(
+    project: Optional[str] = Field(
         description="Projects the candidate has worked on, including the name of the project, the role, and the responsibilities"
     )
-    education: str = Field(
+    education: Optional[str] = Field(
         description="Education history, degrees, institutions, and graduation years"
     )
     certifications: Optional[str] = Field(

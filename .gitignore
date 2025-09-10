@@ -11,6 +11,7 @@ __pycache__/
 # Notebook artifacts
 *.ipynb_checkpoints
 *.ipynb
+*/notebooks/*
 
 # Logs
 logs/*

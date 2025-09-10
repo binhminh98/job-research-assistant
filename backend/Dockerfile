@@ -1,8 +1,8 @@
-FROM python:3.10.9-slim
+FROM python:3.12.7-slim
 
-WORKDIR /fastapi_app
+WORKDIR /backend_app
 
-COPY . /fastapi_app/
+COPY . /backend_app/
 
 # Install system dependencies needed to build psutil
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Requirements to run fastapi
-RUN pip install --no-cache-dir -r /fastapi_app/requirements.txt
+RUN pip install --no-cache-dir -r /backend_app/requirements.txt
 
 # Expose port
 EXPOSE 80
